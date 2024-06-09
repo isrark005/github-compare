@@ -11,3 +11,15 @@ export const GetProfileData = async (userName) => {
     throw error;
   }
 };
+
+export const GetGitHubInfo = async (userName) => {
+  try {
+    const response = await axios.get(
+      `https://api.github.com/users/${userName}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};

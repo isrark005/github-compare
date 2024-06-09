@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 
 ChartJS.register(CategoryScale,LinearScale,BarElement, PointElement, LineElement, Tooltip  )
 
-export function LinneChart({myData, comparerData}) {
+export function LinneChart({myData, comparerData, userNames}) {
    
-    
+    console.log(userNames)
     const [myContributions, setMyContributions] = useState(Object.values(myData));
     const [comparerContributions, setComparerContributions] = useState(Object.values(comparerData));
     const getUserYearsforLabel = (myData, comparerData) => {
@@ -18,12 +18,12 @@ export function LinneChart({myData, comparerData}) {
         return comparerYears
      }   
     }
-    const mainLabel =getUserYearsforLabel(myData, comparerData) 
+    const mainLabel = getUserYearsforLabel(myData, comparerData) 
     
     useEffect(() => {
         const maxLength = Math.max(myContributions.length, comparerContributions.length);
     
-        // Function to pad an array with zeroes at the start
+        // Function to pad an array with null at the start
         const padArray = (arr, length) => {
           const padding = Array(length - arr.length).fill(null);
           return [...padding, ...arr];
@@ -41,11 +41,11 @@ export function LinneChart({myData, comparerData}) {
     const LINECHART_DATA = {
         labels: mainLabel,
         datasets: [
-           { label: 'My data',
+           { label: userNames.myname,
             data: myContributions,
             borderColor: '#fad673'
            },
-           { label: 'Comparer data',
+           { label: userNames.comparerName,
             data: comparerContributions,
             borderColor: '#da73fa'
            },
