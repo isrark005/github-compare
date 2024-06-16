@@ -15,6 +15,8 @@ function App() {
   const [comparerName, setComparerName] = useState('');
   const [memeIndex, setMemeIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(false);
+  const [winner, setWinner] = useState(null);
+  const [loser, setLoser] = useState(null);
  const handleSubmit = async (e) => {
   e.preventDefault();
   
@@ -49,6 +51,7 @@ function App() {
 
 const getMemeIndex = (myContribution, comparerContribution) => {
   if (myContribution === 0 && comparerContribution === 0) {
+    return 0;
   }
   const maxContribution = Math.max(myContribution, comparerContribution);
   const difference = Math.abs(myContribution - comparerContribution);
@@ -57,26 +60,32 @@ const getMemeIndex = (myContribution, comparerContribution) => {
   return Math.min(index, 9);
 };
 
-  useEffect(() => {
-    if (myData && comparerData) {
-      const arrOfMyContri = Object.values(myData.total);
-      const arrOfComparerContri = Object.values(comparerData.total);
 
-      const myTotalContribution = arrOfMyContri.reduce((total, curVal) => {
-        return total + curVal;
-      });
-      setMyTotalContribution(myTotalContribution)
+useEffect(() => {
+  if (myData && comparerData) {
+    const arrOfMyContri = Object.values(myData.total);
+    const arrOfComparerContri = Object.values(comparerData.total);
 
-      const comparertotalContri = arrOfComparerContri.reduce(
-        (total, curVal) => {
-          return total + curVal;
-        }
-        );
-      setComparertotalContri(comparertotalContri);
-      setMemeIndex(getMemeIndex(myTotalContribution, comparertotalContri));
+    const myTotalContribution = arrOfMyContri.reduce((total, curVal) => total + curVal, 0);
+    setMyTotalContribution(myTotalContribution);
+
+    const comparerTotalContribution = arrOfComparerContri.reduce((total, curVal) => total + curVal, 0);
+    setComparertotalContri(comparerTotalContribution);
+
+    const memeIndex = getMemeIndex(myTotalContribution, comparerTotalContribution);
+    setMemeIndex(memeIndex);
+
+    if (myTotalContribution > comparerTotalContribution) {
+      setWinner(myName);
+      setLoser(comparerName);
+    } else {
+      setWinner(comparerName);
+      setLoser(myName);
     }
-  }, [myData, comparerData]);
-console.log(memeIndex);
+  }
+}, [myData, comparerData, myName, comparerName]);
+  console.log(memeIndex);
+
   return (
     <>
       <h1>GitHub Profile compare</h1>
@@ -133,7 +142,15 @@ console.log(memeIndex);
           </div>
           <div className="meme h-[60vh] flex justify-center mx-auto max-w-[400px]">
         {/* <img src={memeDemo} alt="" className="max-h-[500px]" /> */}
-        <MemeGenerator myName={myName} comparerName={comparerName} memeIndex={0} />
+        {winner && loser && (
+        <MemeGenerator 
+          winnerName={winner} 
+          loserName={loser} 
+          // below: we dont have 10 memes yet so passing hardcoded value 
+          memeIndex={0} 
+        />
+      )}
+       
           </div>
         </div>
       )}

@@ -1,49 +1,45 @@
 import React, { useEffect, useRef } from 'react';
 import {
-    dogMeme,
-    spiderManMeme,
-    topContender
-} from "../assets"
+  dogMeme,
+  spiderManMeme,
+  topContender
+} from "../assets";
 
-
-const MemeGenerator = ({ myName, comparerName, memeIndex }) => {
+const MemeGenerator = ({ winnerName, loserName, memeIndex }) => {
   const canvasRef = useRef(null);
 
-  
   const memeArray = [
     {
       image: topContender,
       titlePosition: { x: 200, y: 50 },
-      myNamePosition: { x: 300, y: 400 },
-      comparerNamePosition: { x: 500, y: 300 },
+      winnerNamePosition: { x: 300, y: 400 },
+      loserNamePosition: { x: 500, y: 300 },
       titleFontSize: 40,
-      myNameFontSize: 30,
-      comparerNameFontSize: 30
+      nameFontSize: 30
     },
     {
       image: dogMeme,
       titlePosition: { x: 200, y: 70 },
-      myNamePosition: { x: 300, y: 450 },
-      comparerNamePosition: { x: 500, y: 350 },
+      winnerNamePosition: { x: 300, y: 450 },
+      loserNamePosition: { x: 500, y: 350 },
       titleFontSize: 40,
-      myNameFontSize: 30,
-      comparerNameFontSize: 30
+      nameFontSize: 30
     },
     {
       image: spiderManMeme,
       titlePosition: { x: 200, y: 70 },
-      myNamePosition: { x: 300, y: 450 },
-      comparerNamePosition: { x: 500, y: 350 },
+      winnerNamePosition: { x: 300, y: 450 },
+      loserNamePosition: { x: 500, y: 350 },
       titleFontSize: 40,
-      myNameFontSize: 30,
-      comparerNameFontSize: 30
+      nameFontSize: 30
     }
-    
   ];
 
   const meme = memeArray[memeIndex];
 
   useEffect(() => {
+    if (!winnerName || !loserName) return; // Prevent drawing until winner and loser names are determined
+
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     const img = new Image();
@@ -52,11 +48,10 @@ const MemeGenerator = ({ myName, comparerName, memeIndex }) => {
     img.onload = () => {
       canvas.width = img.width;
       canvas.height = img.height;
-      
-      
+
       ctx.drawImage(img, 0, 0);
 
-      // my credits
+      // Draw title
       ctx.font = `bold ${meme.titleFontSize}px Arial`;
       ctx.fillStyle = 'white';
       ctx.strokeStyle = 'black';
@@ -65,17 +60,16 @@ const MemeGenerator = ({ myName, comparerName, memeIndex }) => {
       ctx.fillText('project by @isrark005', meme.titlePosition.x, meme.titlePosition.y);
       ctx.strokeText('project by @isrark005', meme.titlePosition.x, meme.titlePosition.y);
 
-      // myName text
-      ctx.font = `bold ${meme.myNameFontSize}px Arial`;
-      ctx.fillText(myName, meme.myNamePosition.x, meme.myNamePosition.y);
-      ctx.strokeText(myName, meme.myNamePosition.x, meme.myNamePosition.y);
+      // Draw winner name
+      ctx.font = `bold ${meme.nameFontSize}px Arial`;
+      ctx.fillText(winnerName, meme.winnerNamePosition.x, meme.winnerNamePosition.y);
+      ctx.strokeText(winnerName, meme.winnerNamePosition.x, meme.winnerNamePosition.y);
 
-      // comparerName text
-      ctx.font = `bold ${meme.comparerNameFontSize}px Arial`;
-      ctx.fillText(comparerName, meme.comparerNamePosition.x, meme.comparerNamePosition.y);
-      ctx.strokeText(comparerName, meme.comparerNamePosition.x, meme.comparerNamePosition.y);
+      // Draw loser name
+      ctx.fillText(loserName, meme.loserNamePosition.x, meme.loserNamePosition.y);
+      ctx.strokeText(loserName, meme.loserNamePosition.x, meme.loserNamePosition.y);
     };
-  }, [myName, comparerName, meme]);
+  }, [winnerName, loserName, meme]);
 
   return <canvas ref={canvasRef} />;
 };
