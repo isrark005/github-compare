@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { GetProfileData, GetGitHubInfo } from "./APIs/GetProfileData";
+import { GetProfileData, GetGitHubInfo } from "./APIs/getProfileData";
 import { LinneChart } from "./components/LinneChart";
 import MemeGenerator from "./components/MemeGenerator";
 
