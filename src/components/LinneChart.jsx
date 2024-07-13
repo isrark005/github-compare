@@ -49,8 +49,12 @@ export function LinneChart({myData, comparerData, userNames}) {
             data: comparerContributions,
             borderColor: '#da73fa'
            },
-
-        ]
+        ],
+        options: {
+          grid: {
+            color: '#fff'
+          }
+        }
     }
   
     const options = {}

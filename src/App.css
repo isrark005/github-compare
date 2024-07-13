@@ -1,10 +1,13 @@
 
+
+
+
 body {
   background-color: black;
 }
 
 .body-container {
-  background-image: url('assets/gorilla-bg.jpg');
+  background-image: radial-gradient(circle at var(--x) var(--y), var(--color1) 0%, var(--color2) var(--position2)), url('assets/gorilla-bg.jpg');
   background-position: center top;
   background-size: cover;
 }
