@@ -124,7 +124,7 @@ function App() {
     "--position2": haveData ? '50%' : '0%',
     }}
     transition={transition}>
-      <Container className="h-full pt-7">
+      <Container className="h-full pt-7 font-sans">
         <Header />
 
         <div
@@ -222,36 +222,36 @@ function App() {
               transition={transition}
                 className="comparison-container flex"
               >
-                <div className="line-graph w-1/2">
-                  <div className="total-contri">
-                    <div className="my-contri text-left flex items-center gap-3">
-                      <div className="w-[38px] bg-[#fad673] aspect-square border border-black"></div>
-                      <div className="myInfo">
-                        <h1 className="my-name font-bold text-[20px]">
-                          {myName}
-                        </h1>
-                        <p className="text-[12px]">
-                          Total Contribution : {myTotalContribution}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="comparer-contri text-left flex items-center gap-3">
-                      <div className="w-[38px] bg-[#da73fa] aspect-square border border-black"></div>
-                      <div className="comparerInfo">
-                        <h1 className="comparer-name font-bold text-[20px]">
-                          {comparerName}
-                        </h1>
-                        <p className="text-[12px]">
-                          Total Contribution : {comparertotalContri}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                <div className="line-graph w-1/2 mt-10">
                   <LinneChart
                     userNames={{ myname: myName, comparerName: comparerName }}
                     myData={myData?.total}
                     comparerData={comparerData?.total}
                   />
+                  <div className="total-contri text-white flex gap-10 mt-10">
+                    <div className="my-contri text-left flex items-center gap-3">
+                      <div className="w-[54px] rounded-md bg-[#fad673] aspect-square border border-black"></div>
+                      <div className="myInfo">
+                        <h1 className="my-name font-semibold text-[20px]">
+                         {myName}
+                        </h1> 
+                        <p className="text-[12px] text-[#EAEAEA] font-light">
+                          Total Contribution : {myTotalContribution}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="comparer-contri text-left flex items-center gap-3">
+                      <div className="w-[54px] rounded-md bg-[#da73fa] aspect-square border border-black"></div>
+                      <div className="comparerInfo">
+                        <h1 className="comparer-name font-semibold text-[20px]">
+                          {comparerName}
+                        </h1>
+                        <p className="text-[12px] text-[#EAEAEA] font-light">
+                          Total Contribution : {comparertotalContri}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div className="meme h-[60vh] flex justify-center mx-auto max-w-[400px]">
                   {/* <img src={memeDemo} alt="" className="max-h-[500px]" /> */}
