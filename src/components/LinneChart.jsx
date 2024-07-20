@@ -67,7 +67,7 @@ export function LinneChart({myData, comparerData, userNames}) {
       scales: {
         x: {
             grid: {
-                color: '#FFFFFF33', // Change this to your desired color for x-axis grid lines
+                color: '#FFFFFF33', 
             },
             ticks: {
               color: '#fff'
@@ -75,7 +75,7 @@ export function LinneChart({myData, comparerData, userNames}) {
         },
         y: {
             grid: {
-                color: '#FFFFFF33', // Change this to your desired color for y-axis grid lines
+                color: '#FFFFFF33', 
             },
             ticks: {
               color: '#fff'

@@ -71,7 +71,7 @@ const MemeGenerator = ({ winnerName, loserName, memeIndex }) => {
     };
   }, [winnerName, loserName, meme]);
 
-  return <canvas ref={canvasRef} />;
+  return <canvas ref={canvasRef} className='w-[316px] h-[370px]' />;
 };
 
 export default MemeGenerator;

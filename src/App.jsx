@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { LinneChart } from "./components/LinneChart";
 import MemeGenerator from "./components/MemeGenerator";
 import { GetGitHubInfo, GetProfileData } from "./APIs/GetProfileData";
-import { gorillaBg } from "./assets";
 import { Container } from "./components/Container";
 import { Header } from "./components/Header";
 import { ButtonArrow } from "./assets/buttonArrow";
 import { AnimatePresence, easeInOut, motion } from "framer-motion";
+import html2canvas from "html2canvas";
 
 function App() {
   const [myUserName, setMyUserName] = useState("");
@@ -23,7 +23,7 @@ function App() {
   const [winner, setWinner] = useState(null);
   const [loser, setLoser] = useState(null);
   const [haveData, setHaveData] = useState(false);
-
+  const containerRef = useRef(null);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -71,6 +71,24 @@ function App() {
     return Math.min(index, 9);
   };
 
+  const downloadImage = (e) => {
+
+    if (!containerRef.current) return;
+  
+    e.currentTarget.style.visibility = 'hidden';
+    html2canvas(containerRef.current, {backgroundColor: '#000000'})
+      .then((canvas) => {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'githubStatus.png';
+        link.click();
+      })
+      .catch((error) => {
+        console.error('Error capturing the image:', error);
+      })
+      .finally(()=> e.currentTarget.style.visibility = 'visible')
+  };
+
   useEffect(() => {
     if (myData && comparerData) {
       const arrOfMyContri = Object.values(myData.total);
@@ -106,15 +124,23 @@ function App() {
   }, [myData, comparerData, myName, comparerName]);
 
   const transition = {duration: 1, ease: 'easeInOut' };
-  const gradientStyles = {
-    color1: 'rgba(74,178,1,1)',
-    color2: 'rgba(0,0,0,1)',
-    x: haveData ? '30%' : '50%',  // Adjust X position here
-    y: haveData ? '70%' : '50%',  // Adjust Y position here
-  };
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  const fontSize = haveData ? (isMobile ? '34px' : '52px') : (isMobile ? '44px' : '68px');
 
   return (
-    <motion.main className="body-container h-[100dvh] overflow-hidden"
+    <motion.main className="body-container h-[100dvh] md:overflow-hidden"
    
   animate={{
     "--x": '68%',  // Adjust X position for animation
@@ -128,11 +154,12 @@ function App() {
         <Header />
 
         <div
+        ref={containerRef}
           className={`main-container h-[calc(100dvh_-_88px)] flex flex-col pb-24`}
          
         >
           <motion.div
-            className="headering-wrapper flex mt-auto"
+            className="headering-wrapper flex mt-auto max-md:justify-center"
             transition={transition}
             initial={{
               marginTop: "auto",
@@ -145,10 +172,10 @@ function App() {
             }}
           >
             <motion.h1
-              className="text-white leading-tight text-left w-fit"
+              className={`text-white leading-[0.9em] text-left w-fit ${haveData ? 'mt-8': ''} max-md:text-[34px]`}
               initial={false}
               animate={{
-                fontSize: haveData ? "52px" : "68px",
+                fontSize: fontSize,
                 fontWeight: haveData ? 600 : 700,
               }}
               transition={transition}
@@ -220,9 +247,9 @@ function App() {
               animate={{ translateY: 0, scale: 1, opacity: 1}}
               exit={{scale: 0.9, opacity: 0, translateY: -100}}
               transition={transition}
-                className="comparison-container flex"
+                className="comparison-container flex max-md:flex-col"
               >
-                <div className="line-graph w-1/2 mt-10">
+                <div className="line-graph w-1/2 mt-8 max-md:w-full">
                   <LinneChart
                     userNames={{ myname: myName, comparerName: comparerName }}
                     myData={myData?.total}
@@ -253,16 +280,31 @@ function App() {
                     </div>
                   </div>
                 </div>
-                <div className="meme h-[60vh] flex justify-center mx-auto max-w-[400px]">
+                <div className="meme h-[60vh] flex flex-col justify-start gap-6 mx-auto max-w-[400px]">
                   {/* <img src={memeDemo} alt="" className="max-h-[500px]" /> */}
+                 <div className="canvas-wrapper w-[400px]">
                   {winner && loser && (
                     <MemeGenerator
                       winnerName={winner}
                       loserName={loser}
-                      // below: we dont have 10 memes yet so passing hardcoded value
+                      //  we dont have 10 memes yet so passing hardcoded value
                       memeIndex={0}
                     />
                   )}
+                  </div>
+                  {/* <div className="image-container w-[316px] h-[370px] bg-white rounded-md flex items-center justify-center">Meme</div> */}
+                 <div className="btn-wrapper flex justify-center">
+                  <button
+                  onClick={(e)=> downloadImage(e)}
+                    type="button"
+                    className="bg-transparent text-white pl-9 border-[2px] flex items-center border-white rounded-full gap-9"
+                  >
+                    DOWNLOAD
+                    <span className="bg-white rounded-full h-[54px] aspect-square grid content-center justify-center border-[2px] border-white">
+                      <ButtonArrow />
+                    </span>
+                  </button>
+                  </div>
                 </div>
               </motion.div>
           )}
