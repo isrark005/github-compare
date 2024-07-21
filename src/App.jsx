@@ -24,6 +24,7 @@ function App() {
   const [loser, setLoser] = useState(null);
   const [haveData, setHaveData] = useState(false);
   const containerRef = useRef(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -52,10 +53,10 @@ function App() {
       setComparerData(comparerProfileData);
       setComparerName(comparerGitHubInfo?.name || comparerUserInput);
     } catch (error) {
-      // Handle errors if any
+      
       console.error("Error fetching data:", error);
     } finally {
-      // Stop loading
+      
       setIsLoading(false);
     }
   };
@@ -140,11 +141,11 @@ function App() {
   const fontSize = haveData ? (isMobile ? '34px' : '52px') : (isMobile ? '44px' : '68px');
 
   return (
-    <motion.main className="body-container h-[100dvh] md:overflow-hidden"
+    <motion.main className="body-container h-[100dvh] "
    
   animate={{
-    "--x": '68%',  // Adjust X position for animation
-    "--y": haveData ? '62%' : '100%',  // Adjust Y position for animation
+    "--x": '68%',  
+    "--y": haveData ? '62%' : '100%', 
     "--color1" : 'rgba(74,178,1,1)',
     "--color2" : haveData ? 'rgba(0,0,0,1)' : 'rgba(0,0,0,0)',
     "--position2": haveData ? '50%' : '0%',
@@ -155,7 +156,7 @@ function App() {
 
         <div
         ref={containerRef}
-          className={`main-container h-[calc(100dvh_-_88px)] flex flex-col pb-24`}
+          className={`main-container h-[calc(100dvh_-_88px)] flex flex-col pb-24 md:pl-8`}
          
         >
           <motion.div
@@ -244,8 +245,8 @@ function App() {
           {myData && comparerData && (
               <motion.div
               initial={{opacity: 0, translateY: 100, scale: 0.8}}
-              animate={{ translateY: 0, scale: 1, opacity: 1}}
               exit={{scale: 0.9, opacity: 0, translateY: -100}}
+              animate={{ translateY: 0, scale: 1, opacity: 1}}
               transition={transition}
                 className="comparison-container flex max-md:flex-col"
               >
@@ -257,7 +258,7 @@ function App() {
                   />
                   <div className="total-contri text-white flex gap-10 mt-10">
                     <div className="my-contri text-left flex items-center gap-3">
-                      <div className="w-[54px] rounded-md bg-[#fad673] aspect-square border border-black"></div>
+                      <div className="w-[54px] rounded-md bg-[#63FF60] aspect-square border border-black"></div>
                       <div className="myInfo">
                         <h1 className="my-name font-semibold text-[20px]">
                          {myName}
@@ -268,7 +269,7 @@ function App() {
                       </div>
                     </div>
                     <div className="comparer-contri text-left flex items-center gap-3">
-                      <div className="w-[54px] rounded-md bg-[#da73fa] aspect-square border border-black"></div>
+                      <div className="w-[54px] rounded-md bg-[#FFE55B] aspect-square border border-black"></div>
                       <div className="comparerInfo">
                         <h1 className="comparer-name font-semibold text-[20px]">
                           {comparerName}
@@ -280,9 +281,9 @@ function App() {
                     </div>
                   </div>
                 </div>
-                <div className="meme h-[60vh] flex flex-col justify-start gap-6 mx-auto max-w-[400px]">
+                <div className="meme h-[60vh] -mt-12 flex flex-col justify-start gap-6 mx-auto max-w-[400px]">
                   {/* <img src={memeDemo} alt="" className="max-h-[500px]" /> */}
-                 <div className="canvas-wrapper w-[400px]">
+                 <div className="canvas-wrapper">
                   {winner && loser && (
                     <MemeGenerator
                       winnerName={winner}
