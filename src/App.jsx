@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { LinneChart } from "./components/LinneChart";
 import MemeGenerator from "./components/MemeGenerator";
 import { GetGitHubInfo, GetProfileData } from "./APIs/GetProfileData";
-import { gorillaBg } from "./assets";
 import { Container } from "./components/Container";
 import { Header } from "./components/Header";
 import { ButtonArrow } from "./assets/buttonArrow";
+import { AnimatePresence, easeInOut, motion } from "framer-motion";
+import html2canvas from "html2canvas";
 
 function App() {
   const [myUserName, setMyUserName] = useState("");
@@ -21,6 +22,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [winner, setWinner] = useState(null);
   const [loser, setLoser] = useState(null);
+  const [haveData, setHaveData] = useState(false);
+  const containerRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,10 +53,10 @@ function App() {
       setComparerData(comparerProfileData);
       setComparerName(comparerGitHubInfo?.name || comparerUserInput);
     } catch (error) {
-      // Handle errors if any
+      
       console.error("Error fetching data:", error);
     } finally {
-      // Stop loading
+      
       setIsLoading(false);
     }
   };
@@ -67,6 +70,24 @@ function App() {
     const percentageDifference = (difference / maxContribution) * 100;
     const index = Math.floor(percentageDifference / 10);
     return Math.min(index, 9);
+  };
+
+  const downloadImage = (e) => {
+
+    if (!containerRef.current) return;
+  
+    e.currentTarget.style.visibility = 'hidden';
+    html2canvas(containerRef.current, {backgroundColor: '#000000'})
+      .then((canvas) => {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'githubStatus.png';
+        link.click();
+      })
+      .catch((error) => {
+        console.error('Error capturing the image:', error);
+      })
+      .finally(()=> e.currentTarget.style.visibility = 'visible')
   };
 
   useEffect(() => {
@@ -99,105 +120,199 @@ function App() {
         setWinner(comparerName);
         setLoser(myName);
       }
+      setHaveData(true);
     }
   }, [myData, comparerData, myName, comparerName]);
-  console.log(memeIndex);
+
+  const transition = {duration: 1, ease: 'easeInOut' };
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  const fontSize = haveData ? (isMobile ? '34px' : '52px') : (isMobile ? '44px' : '68px');
 
   return (
-    <main className="body-container h-[100dvh]">
-      <Container className="h-full pt-7">
+    <motion.main className="body-container h-[100dvh] "
+   
+  animate={{
+    "--x": '68%',  
+    "--y": haveData ? '62%' : '100%', 
+    "--color1" : 'rgba(74,178,1,1)',
+    "--color2" : haveData ? 'rgba(0,0,0,1)' : 'rgba(0,0,0,0)',
+    "--position2": haveData ? '50%' : '0%',
+    }}
+    transition={transition}>
+      <Container className="h-full pt-7 font-sans">
         <Header />
 
-        <div className="main-container h-[calc(100dvh_-_88px)] flex flex-col justify-end pb-24">
-          <h1 className="font-semibold text-[68px] text-center text-white leading-tight">
-            GitHub Profile <br /> Comparison
-          </h1>
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-wrap justify-center mt-4"
+        <div
+        ref={containerRef}
+          className={`main-container h-[calc(100dvh_-_88px)] flex flex-col pb-24 md:pl-8`}
+         
+        >
+          <motion.div
+            className="headering-wrapper flex mt-auto max-md:justify-center"
+            transition={transition}
+            initial={{
+              marginTop: "auto",
+              paddingLeft: "calc(50% - 230px)",
+            }}
+            animate={{
+              marginTop: haveData ? "0px" : "200px",
+              paddingLeft: haveData ? "0" : "calc(50% - 230px)",
+              
+            }}
           >
-            <div className="my-info w-5/12 text-center">
-              <input
-                value={myUserName}
-                onChange={(e) => setMyUserName(e.currentTarget.value)}
-                placeholder="Your Username"
-                required
-                className="border bg-white shadow-[0px_4px_50px_rgba(0,_255,_87,_0.5)] w-[294px] py-3 px-4 text-[18px] rounded-full"
-              />
-            </div>
-            <div className="vs-wrapper font-bold text-[38px] text-white border-[2px] border-white aspect-square w-[64px] rounded-full grid content-center justify-center">
-              VS
-            </div>
-            <div className="comparer-info w-5/12 text-center">
-              <input
-                value={comparerUserInput}
-                onChange={(e) => setComparerUserInput(e.currentTarget.value)}
-                placeholder="enter other persons username"
-                required
-                className="border bg-white shadow-[0px_4px_50px_rgba(0,_255,_87,_0.5)] w-[294px] py-3 px-4 text-[18px] rounded-full"
-              />
-            </div>
-            <div className="button-wrapper w-full flex justify-center items-center  mt-10">
-              <button
-                type="submit"
-                className="bg-transparent text-white pl-9 border-[2px] flex items-center border-white rounded-full gap-9"
+            <motion.h1
+              className={`text-white leading-[0.9em] text-left w-fit ${haveData ? 'mt-8': ''} max-md:text-[34px]`}
+              initial={false}
+              animate={{
+                fontSize: fontSize,
+                fontWeight: haveData ? 600 : 700,
+              }}
+              transition={transition}
+            >
+              GitHub Profile <br />{" "}
+              <motion.span
+                transition={transition}
+                initial={false}
+                animate={{ marginLeft: haveData ? "0px" : "26px" }}
               >
-                COMPARE
-                <span className="bg-white rounded-full h-[54px] aspect-square grid content-center justify-center border-[2px] border-white">
-                  <ButtonArrow />
-                </span>
-              </button>
-            </div>
-          </form>
-        </div>
+                Comparison
+              </motion.span>
+            </motion.h1>
+          </motion.div>
+            <AnimatePresence>
+          {!haveData && (
+              <motion.form
+                initial={{ translateY: 10, scale: 1.1, opacity: 0}}
+                animate={{ translateY: 0, scale: 1, opacity: 1}}
+                exit={{scale: 0.9, opacity: 0, translateY: -100, height: '0%'}}
+                transition={transition}
 
-        {isLoading && <h1>Loading...</h1>}
-        {myData && comparerData && (
-          <div className="comparison-container flex">
-            <div className="line-graph w-1/2">
-              <div className="total-contri">
-                <div className="my-contri text-left flex items-center gap-3">
-                  <div className="w-[38px] bg-[#fad673] aspect-square border border-black"></div>
-                  <div className="myInfo">
-                    <h1 className="my-name font-bold text-[20px]">{myName}</h1>
-                    <p className="text-[12px]">
-                      Total Contribution : {myTotalContribution}
-                    </p>
+                onSubmit={handleSubmit}
+                className="flex flex-wrap justify-center mt-4"
+              >
+                <div className="my-info w-5/12 text-center">
+                  <input
+                    value={myUserName}
+                    onChange={(e) => setMyUserName(e.currentTarget.value)}
+                    placeholder="Your Username"
+                    required
+                    className="border bg-white shadow-[0px_4px_50px_rgba(0,_255,_87,_0.5)] w-[294px] py-3 px-4 text-[18px] rounded-full"
+                  />
+                </div>
+                <div className="vs-wrapper font-bold text-[38px] text-white border-[2px] border-white aspect-square w-[64px] rounded-full grid content-center justify-center">
+                {isLoading ? <h1>Loading...</h1> : <span>VS</span>} 
+                </div>
+                <div className="comparer-info w-5/12 text-center">
+                  <input
+                    value={comparerUserInput}
+                    onChange={(e) =>
+                      setComparerUserInput(e.currentTarget.value)
+                    }
+                    placeholder="enter other persons username"
+                    required
+                    className="border bg-white shadow-[0px_4px_50px_rgba(0,_255,_87,_0.5)] w-[294px] py-3 px-4 text-[18px] rounded-full"
+                  />
+                </div>
+                <div className="button-wrapper w-full flex justify-center items-center  mt-10">
+                  <button
+                    type="submit"
+                    className="bg-transparent text-white pl-9 border-[2px] flex items-center border-white rounded-full gap-9"
+                  >
+                    COMPARE
+                    <span className="bg-white rounded-full h-[54px] aspect-square grid content-center justify-center border-[2px] border-white">
+                      <ButtonArrow />
+                    </span>
+                  </button>
+                </div>
+              </motion.form>
+          )}
+          </AnimatePresence>
+         
+
+          <AnimatePresence>
+          {myData && comparerData && (
+              <motion.div
+              initial={{opacity: 0, translateY: 100, scale: 0.8}}
+              exit={{scale: 0.9, opacity: 0, translateY: -100}}
+              animate={{ translateY: 0, scale: 1, opacity: 1}}
+              transition={transition}
+                className="comparison-container flex max-md:flex-col"
+              >
+                <div className="line-graph w-1/2 mt-8 max-md:w-full">
+                  <LinneChart
+                    userNames={{ myname: myName, comparerName: comparerName }}
+                    myData={myData?.total}
+                    comparerData={comparerData?.total}
+                  />
+                  <div className="total-contri text-white flex gap-10 mt-10">
+                    <div className="my-contri text-left flex items-center gap-3">
+                      <div className="w-[54px] rounded-md bg-[#63FF60] aspect-square border border-black"></div>
+                      <div className="myInfo">
+                        <h1 className="my-name font-semibold text-[20px]">
+                         {myName}
+                        </h1> 
+                        <p className="text-[12px] text-[#EAEAEA] font-light">
+                          Total Contribution : {myTotalContribution}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="comparer-contri text-left flex items-center gap-3">
+                      <div className="w-[54px] rounded-md bg-[#FFE55B] aspect-square border border-black"></div>
+                      <div className="comparerInfo">
+                        <h1 className="comparer-name font-semibold text-[20px]">
+                          {comparerName}
+                        </h1>
+                        <p className="text-[12px] text-[#EAEAEA] font-light">
+                          Total Contribution : {comparertotalContri}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="comparer-contri text-left flex items-center gap-3">
-                  <div className="w-[38px] bg-[#da73fa] aspect-square border border-black"></div>
-                  <div className="comparerInfo">
-                    <h1 className="comparer-name font-bold text-[20px]">
-                      {comparerName}
-                    </h1>
-                    <p className="text-[12px]">
-                      Total Contribution : {comparertotalContri}
-                    </p>
+                <div className="meme h-[60vh] -mt-12 flex flex-col justify-start gap-6 mx-auto max-w-[400px]">
+                  {/* <img src={memeDemo} alt="" className="max-h-[500px]" /> */}
+                 <div className="canvas-wrapper">
+                  {winner && loser && (
+                    <MemeGenerator
+                      winnerName={winner}
+                      loserName={loser}
+                      //  we dont have 10 memes yet so passing hardcoded value
+                      memeIndex={0}
+                    />
+                  )}
+                  </div>
+                  {/* <div className="image-container w-[316px] h-[370px] bg-white rounded-md flex items-center justify-center">Meme</div> */}
+                 <div className="btn-wrapper flex justify-center">
+                  <button
+                  onClick={(e)=> downloadImage(e)}
+                    type="button"
+                    className="bg-transparent text-white pl-9 border-[2px] flex items-center border-white rounded-full gap-9"
+                  >
+                    DOWNLOAD
+                    <span className="bg-white rounded-full h-[54px] aspect-square grid content-center justify-center border-[2px] border-white">
+                      <ButtonArrow />
+                    </span>
+                  </button>
                   </div>
                 </div>
-              </div>
-              <LinneChart
-                userNames={{ myname: myName, comparerName: comparerName }}
-                myData={myData?.total}
-                comparerData={comparerData?.total}
-              />
-            </div>
-            <div className="meme h-[60vh] flex justify-center mx-auto max-w-[400px]">
-              {/* <img src={memeDemo} alt="" className="max-h-[500px]" /> */}
-              {winner && loser && (
-                <MemeGenerator
-                  winnerName={winner}
-                  loserName={loser}
-                  // below: we dont have 10 memes yet so passing hardcoded value
-                  memeIndex={0}
-                />
-              )}
-            </div>
-          </div>
-        )}
+              </motion.div>
+          )}
+          </AnimatePresence>
+        </div>
       </Container>
-    </main>
+    </motion.main>
   );
 }
 

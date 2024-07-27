@@ -1,4 +1,4 @@
-import { Line, Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Tooltip } from "chart.js";
 import { useEffect, useState } from "react";
 
@@ -6,7 +6,7 @@ ChartJS.register(CategoryScale,LinearScale,BarElement, PointElement, LineElement
 
 export function LinneChart({myData, comparerData, userNames}) {
    
-    console.log(userNames)
+    
     const [myContributions, setMyContributions] = useState(Object.values(myData));
     const [comparerContributions, setComparerContributions] = useState(Object.values(comparerData));
     const getUserYearsforLabel = (myData, comparerData) => {
@@ -43,17 +43,46 @@ export function LinneChart({myData, comparerData, userNames}) {
         datasets: [
            { label: userNames.myname,
             data: myContributions,
-            borderColor: '#fad673'
+            borderColor: '#63FF60',
+            pointBackgroundColor: '#fff', 
+            pointBorderColor: '#fff', 
+            pointWidth: 5,
+            pointRadius: 5,
+            borderWidth: 4
            },
            { label: userNames.comparerName,
             data: comparerContributions,
-            borderColor: '#da73fa'
+            borderColor: '#FFE55B',
+            pointBackgroundColor: '#fff', 
+            pointBorderColor: '#fff', 
+            pointWidth: 5,
+            pointRadius: 5,
+            borderWidth: 4
            },
-
-        ]
+        ],
+        
     }
   
-    const options = {}
+    const options = {
+      scales: {
+        x: {
+            grid: {
+                color: '#FFFFFF33', 
+            },
+            ticks: {
+              color: '#fff'
+            }
+        },
+        y: {
+            grid: {
+                color: '#FFFFFF33', 
+            },
+            ticks: {
+              color: '#fff'
+            }
+        },
+    },
+    }
     return (
         
             <Line options={options} data={LINECHART_DATA} />
