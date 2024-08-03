@@ -7,7 +7,7 @@ export const GetProfileData = async (userName) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("some error:", error);
     throw error;
   }
 };
@@ -19,7 +19,7 @@ export const GetGitHubInfo = async (userName) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("some error:", error);
     throw error;
   }
 };
