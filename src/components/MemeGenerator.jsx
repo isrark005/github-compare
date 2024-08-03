@@ -1,38 +1,102 @@
 import React, { useEffect, useRef } from 'react';
 import {
-  dogMeme,
-  spiderManMeme,
-  topContender
-} from "../assets";
+  firstMeme,
+  secondMeme,
+  thirdMeme,
+  fourthMeme,
+  fifthMeme,
+  sixthMeme,
+  seventhMeme,
+  eighthMeme,
+  ninthMeme,
+  tenth
+} from '../assets/memes';
 
 const MemeGenerator = ({ winnerName, loserName, memeIndex }) => {
   const canvasRef = useRef(null);
 
   const memeArray = [
     {
-      image: topContender,
-      titlePosition: { x: 200, y: 50 },
-      winnerNamePosition: { x: 300, y: 400 },
-      loserNamePosition: { x: 500, y: 300 },
-      titleFontSize: 40,
-      nameFontSize: 30
+      image: firstMeme,
+      titlePosition: { x: 240, y: 275 },
+      winnerNamePosition: { x: 80, y: 220 },
+      loserNamePosition: { x: 250, y: 240 },
+      titleFontSize: 24,
+      nameFontSize: 28
     },
     {
-      image: dogMeme,
-      titlePosition: { x: 200, y: 70 },
-      winnerNamePosition: { x: 300, y: 450 },
-      loserNamePosition: { x: 500, y: 350 },
-      titleFontSize: 40,
-      nameFontSize: 30
+      image: secondMeme,
+      titlePosition: { x: 240, y: 275 },
+      winnerNamePosition: { x: 80, y: 120 },
+      loserNamePosition: { x: 220, y: 150 },
+      titleFontSize: 24,
+      nameFontSize: 28
     },
     {
-      image: spiderManMeme,
-      titlePosition: { x: 200, y: 70 },
-      winnerNamePosition: { x: 300, y: 450 },
-      loserNamePosition: { x: 500, y: 350 },
-      titleFontSize: 40,
-      nameFontSize: 30
-    }
+      image: thirdMeme,
+      titlePosition: { x: 45, y: 275 },
+      winnerNamePosition: { x: 120, y: 80 },
+      loserNamePosition: { x: 180, y: 200 },
+      titleFontSize: 14,
+      nameFontSize: 28
+    },
+    {
+      image: fourthMeme,
+      titlePosition: { x: 270, y: 275 },
+      winnerNamePosition: { x: 80, y: 180 },
+      loserNamePosition: { x: 250, y: 200 },
+      titleFontSize: 14,
+      nameFontSize: 28
+    },
+    {
+      image: fifthMeme,
+      titlePosition: { x: 80, y: 10 },
+      winnerNamePosition: { x: 120, y: 120 },
+      loserNamePosition: { x: 230, y: 220 },
+      titleFontSize: 12,
+      nameFontSize: 28
+    },
+    {
+      image: sixthMeme,
+      titlePosition: { x: 45, y: 275 },
+      winnerNamePosition: { x: 90, y: 140 },
+      loserNamePosition: { x: 240, y: 240 },
+      titleFontSize: 14,
+      nameFontSize: 28
+    },
+    {
+      image: seventhMeme,
+      titlePosition: { x: 270, y: 275 },
+      winnerNamePosition: { x: 80, y: 80 },
+      loserNamePosition: { x: 240, y: 100 },
+      titleFontSize: 14,
+      nameFontSize: 28
+    },
+    {
+      image: eighthMeme,
+      titlePosition: { x: 270, y: 275 },
+      winnerNamePosition: { x: 80, y: 100 },
+      loserNamePosition: { x: 250, y: 80 },
+      titleFontSize: 14,
+      nameFontSize: 26
+    },
+    {
+      image: ninthMeme,
+      titlePosition: { x: 270, y: 275 },
+      winnerNamePosition: { x: 120, y: 140 },
+      loserNamePosition: { x: 80, y: 250 },
+      titleFontSize: 14,
+      nameFontSize: 28
+    },
+    {
+      image: tenth,
+      titlePosition: { x: 45, y: 15 },
+      winnerNamePosition: { x: 220, y: 200 },
+      loserNamePosition: { x: 0, y: 0 },
+      titleFontSize: 14,
+      nameFontSize: 28
+    },
+   
   ];
 
   const meme = memeArray[memeIndex];
@@ -57,8 +121,8 @@ const MemeGenerator = ({ winnerName, loserName, memeIndex }) => {
       ctx.strokeStyle = 'black';
       ctx.lineWidth = 2;
       ctx.textAlign = 'center';
-      ctx.fillText('project by @isrark005', meme.titlePosition.x, meme.titlePosition.y);
-      ctx.strokeText('project by @isrark005', meme.titlePosition.x, meme.titlePosition.y);
+      ctx.fillText('- @isrark005', meme.titlePosition.x, meme.titlePosition.y);
+      ctx.strokeText('- @isrark005', meme.titlePosition.x, meme.titlePosition.y);
 
       // Draw winner name
       ctx.font = `bold ${meme.nameFontSize}px Arial`;
