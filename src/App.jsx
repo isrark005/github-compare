@@ -334,6 +334,18 @@ e.currentTarget.style.display = "flex"
                       </div>
                     </div>
                   </div>
+                  <div className="btn-wrapper flex justify-center max-md:mt-4 md:hidden">
+                    <button
+                      onClick={(e) => downloadImage(e)}
+                      type="button"
+                      className="bg-transparent text-white pl-9 border-[2px] flex items-center border-white rounded-full gap-9 "
+                    >
+                      DOWNLOAD
+                      <span className="bg-white rounded-full h-[54px] aspect-square grid content-center justify-center border-[2px] border-white">
+                        <ButtonArrow />
+                      </span>
+                    </button>
+                  </div> 
                 </div>
                 <div className="meme  flex flex-col justify-start mt-10 gap-6 ml-auto max-w-[400px] max-md:max-w-full max-md:ml-0 max-md:gap-0">
                   {/* <img src={memeDemo} alt="" className="max-h-[500px]" /> */}
@@ -348,11 +360,11 @@ e.currentTarget.style.display = "flex"
                     )}
                   </div>
                   {/* <div className="image-container w-[316px] h-[370px] bg-white rounded-md flex items-center justify-center">Meme</div> */}
-                  <div className="btn-wrapper flex justify-center max-md:mt-4">
+                  <div className="btn-wrapper flex justify-center max-md:mt-4 max-md:hidden">
                     <button
                       onClick={(e) => downloadImage(e)}
                       type="button"
-                      className="bg-transparent text-white pl-9 border-[2px] flex items-center border-white rounded-full gap-9"
+                      className="bg-transparent text-white pl-9 border-[2px] flex items-center border-white rounded-full gap-9 "
                     >
                       DOWNLOAD
                       <span className="bg-white rounded-full h-[54px] aspect-square grid content-center justify-center border-[2px] border-white">
