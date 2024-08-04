@@ -6,7 +6,7 @@ import { GetGitHubInfo, GetProfileData } from "./APIs/GetProfileData";
 import { Container } from "./components/Container";
 import { Header } from "./components/Header";
 import { ButtonArrow } from "./assets/buttonArrow";
-import { AnimatePresence, easeInOut, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import html2canvas from "html2canvas";
 import { Loader } from "./components/Loader";
 
@@ -175,7 +175,9 @@ e.currentTarget.style.display = "flex"
       setMyName('');
       setComparerData(null);
       setComparerName('');
-      setHaveData(false)
+      setHaveData(false);
+      setLoser(null);
+      setWinner(null)
     }
 
   return (
