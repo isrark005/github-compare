@@ -48,9 +48,9 @@ npm run dev
 ```
 
 ### Technologies Used
-> React
-> Framer Motion
-> html2canvas
-> GitHub API
+> React,
+> Framer Motion,
+> html2canvas,
+> GitHub API,
 
 For any questions or suggestions, feel free to contact me at isrark005@gmail.com.
