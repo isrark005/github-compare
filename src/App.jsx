@@ -177,7 +177,9 @@ e.currentTarget.style.display = "flex"
       setComparerName('');
       setHaveData(false);
       setLoser(null);
-      setWinner(null)
+      setWinner(null);
+      setMyError('');
+      setComparerError('');
     }
 
   return (
